@@ -193,3 +193,7 @@
         npm i expect@22.3.0 mocha@5.0.1 nodemon@1.15.0 supertest@3.0.0 --save-dev
 
     So we're going to be working on the server.test.js file, first we need to import expect, supertest, app from server.js and todo from the todo model.
+
+[10] Creating the GET/todos route
+
+    The first screen tou're probably going to show a user is a list of all of their Todos and this is the route that we'll  be using
