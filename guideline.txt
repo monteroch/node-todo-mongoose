@@ -1,0 +1,190 @@
+//This is teh guidline of chapter 3
+
+[1] Installing and using mongoose
+    
+    To install mongoose tou need to type:
+        npm i mongoose@5.0.6 --save
+
+    Then we need to require mongoose
+        var mongoose = require('mongoose');
+
+[2] Connecting mongoose to database
+
+    mongoose.connect('mongodb://localhost:27018/TodoApp');
+
+    This is where the 2 functions differ (mongoose.connect vs Mongoclient.connect), The MongoClient.connect method takes a callaback , and that is when we have access to the database. Mongoose is a lot more complex. Mongoose is maintaining the connection over time, behind the scenes, Mongoose is going to be waiting fot the connection before it ever actually tries to make the query and we don't have to micromanafe the order in which things happen.
+
+    since we want to use promises with mongoose we need to declare the next line if code:
+
+        mongoose.Promise = global.Promise;
+        mongoose.connect('mongodb://localhost:27018/TodoApp');
+
+[3] Creating the Todo model
+
+    We're going to create a model for everything that we want to store, For creating the models, we need to create a variable called 
+    Todo and set it equals to mongoose.model. The model is the method we're going to use to create a new model. It takes 2 params, the first one is the string name and the second one is an object, this object is going to define the various properties for a model. like this:
+
+    var Todo = mongoose.model('Todo', {
+        text: {
+            type: String
+        },
+        completed:{
+            type: Boolean
+        },
+        completedAt:{
+            type: Number
+        }
+    })
+
+    -- How to create a new Todo object based on our model?
+
+        var newTodo = new Todo({
+            text: 'Cook dinner'
+        });
+
+    We then can handle promises for when the todo has been saved or not, like this:
+
+    newTodo.save().then((doc) => {
+        console.log('Saved todo', doc);
+    }, (e) => {
+        console.log('Unable to sabe todo');
+    });
+
+[4] Validators, Types and Defaults
+
+    Let's start validating our Todo model, we want that the text property to be always required and throw an error if it's not been specified, we can do it like this:
+    var Todo = mongoose.model('Todo', {
+        text: {
+            type: String,
+            required: true
+        },
+        completed:{
+            type: Boolean
+        },
+        completedAt:{
+            type: Number
+        }
+    })
+
+    We can also set up some custom validator, For stings, for example we have a minlength validator so we can validate empty strings, or we can use the trim property to remove blank spaces at the beginning and the end of the string.
+    var Todo = mongoose.model('Todo', {
+        text: {
+            type: String,
+            required: true,
+            minlength: 1,
+            trim: true
+        },
+        completed:{
+            type: Boolean
+        },
+        completedAt:{
+            type: Number
+        }
+    })
+
+[5] Mongoose defaults
+
+    We can also specify default values for our models properties like this:
+    var Todo = mongoose.model('Todo', {
+        text: {
+            type: String,
+            required: true,
+            minlength: 1,
+            trim: true
+        },
+        completed:{
+            type: Boolean,
+            default: false
+        },
+        completedAt:{
+            type: Number,
+            default: null
+        }
+    })
+
+    We should be aware of the typecasting that has mongoose, if you specify the type of the text property to String but you pass a number or a booleand it will automatically cast the value to a string wrapping in out with quotes, so, it's important to be aware of this.
+
+[6] Mongoose user model for authentication
+
+    Let's create a user model, so we can associated with an account and that account to the Todos that the user creates.
+
+    var User = mongoose.model('User', {
+        email: {
+            type: String,
+            minlength: 1,
+            required: true
+        }
+    });
+
+    var newUser = new User({
+        email: 'chris@mail.com';
+    });
+
+    newUser.save().then((doc) => {
+        console.log('User saved', doc);
+    }, (e) => {
+        console.log('Unable to save user', e);
+    });
+
+[7] Using postman
+
+    Postman lets us make HTTP request and fire them offf. this makes it easy to test that everything that we are creating is working as expected
+    First we will install express in order to be able to respond to http request, for intsalling it, we need to run the next command:
+
+        npm install express body-parser --save
+    
+    Then we'll require, both, express and body-parser, then create a variable called app and set it equals to a call to express:
+
+        var app = express();
+
+    And after that we need to call app.listen.
+
+        app.listen(3000, () => {
+            console.log('Started on port 3000');
+        });
+
+    So far, we can say that we have a very basic Server, now all we have to do in cofiguring our routes, for example, if we want to create a resource we need to use the http post method and send the resoure as the body. To set the route we need to make it this way:
+
+        app.post('/todos', (req, res) => {
+
+        })
+
+    --  How to get data from the client?
+        We have to use body parser module, it will take our JSON and convert it to an object. We're going to configure the middleware using the app.use. The app.use takes the middleware, we usually just access something off of the library. In this case, it's going to be bodyParser.json getting called as a function. The return value from thus JSON method is a function, and that is the middleware that we need to give to Express:
+
+            var app = express();
+            app.use(bodyParser.json());
+
+        With this setup we can send json to our Express app, and we can log in our callback what we recieve:
+
+            app.post('/todos', (req, res) => {
+                console.log(req.body);
+            });
+
+        Now that we have this, we can test our application using the postman app, we just need to change the http method to POST, and then use our URL which in this case is localhost:3000/todos, then in the 'body' tag we need to select JSON(app/json) and tehn just write our json in the text area:
+
+            {
+                "text": "This is from postman"
+            }
+
+            like this, after that just hit the send button and then checkout our terminal.
+
+[8] Testing POST/todos inside Postman
+
+    Let's make a variable called Todo inside the app.post callback and set equals to the data that we recieved in the body of the request. Next we're going to call todo.save. this is going to actually save the model to the database, and we're going to provide a callback for either success or failure. If things go well, let's send the doc back, otherwise if things goes porrly lets send the error back.
+
+        app.post('/todos', (req, res) => {
+            var todo = new Todo({
+                text: req.body.text
+            });
+
+            todo.save().then((doc) => {
+                res.send(doc);
+            },(e) => {
+                res.status(400)send(e);
+            })
+        });
+
+    Then lets set up the status code, We can get a list of all the HTTP statuses available to you by going to httpstatuses.com. By default Express set 200, this means that everything goes OK. A 400 means that there was some bad input.
+
+    **Page 124
