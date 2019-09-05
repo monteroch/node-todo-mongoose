@@ -197,3 +197,32 @@
 [10] Creating the GET/todos route
 
     The first screen tou're probably going to show a user is a list of all of their Todos and this is the route that we'll  be using
+    We will do that with this code:
+
+        app.get('/todos', (req, res) => {
+            Todo.find().then((todos) => {
+                res.send({todos});
+            }, (e) => {
+                res.status(400).send(e);
+            });
+        });
+
+    Then we can try this with postman.
+
+[11] Testing the GET/todos routes:
+
+    First we will need to create some dumb todos, like this:
+
+        const todos = [{
+            text: "First test to do"
+        }, {
+            text: "Second test to do" 
+        }];
+
+    Then in order to write this test case, we will need to inset this todos using the insertMany methodm like this:
+
+        beforeEach((done) => {
+            Todo.remove({}).then(() => {
+                return Todo.insertMany(todos);
+            }).then(() => done());
+        });
