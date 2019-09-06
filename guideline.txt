@@ -235,4 +235,15 @@
 
     In this section we will create an API route for fetching an individual Todo, so the question is, how to fetch a variable that's has passed in via the URL, for example: /todos/12345. we're still going to get the request and response object, the only difference is we're now going to be using something off of request. This one is req.params which is going to have the key value pairs.
 
-    
+[14] Testing GET/todos/:id
+
+    We are going to write 3 test cases
+    1.- Passing an invalid ObjectID so it returns a 404 error.
+    2.- Passing a valid ObjectID but that doesn't match a document.
+    3.- Passing a valid ObjectID that matchs a document and send it back.
+
+    describe('GET/todos/:id', () => {
+        it('Should return todo doc', (done) => {
+            
+        })
+    })
