@@ -259,5 +259,6 @@
     Created mongolab-vertical-90029 as MONGODB_URI
     Use heroku addons:docs mongolab to view documentation
 
-    
+[16] Deletinf a resource -> DELETE/todos/:id
 
+    In order to remove documents from MongoDB collections using mongoose. If we want to remove everything we need to run Todo.remove({});
