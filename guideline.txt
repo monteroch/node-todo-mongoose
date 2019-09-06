@@ -230,3 +230,9 @@
 [12] Mongoose Queries and ID Validation
 
     we can see the code of this section in mongoosequeries.js in the playground folder
+
+[13] Getting an individual result
+
+    In this section we will create an API route for fetching an individual Todo, so the question is, how to fetch a variable that's has passed in via the URL, for example: /todos/12345. we're still going to get the request and response object, the only difference is we're now going to be using something off of request. This one is req.params which is going to have the key value pairs.
+
+    
