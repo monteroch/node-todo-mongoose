@@ -262,3 +262,16 @@
 [16] Deletinf a resource -> DELETE/todos/:id
 
     In order to remove documents from MongoDB collections using mongoose. If we want to remove everything we need to run Todo.remove({});
+
+[17] Testing DELETE/todos/:id
+
+In this section we're going to write some test cases that verify our delete route works as expected.
+
+Todo.findByIdAndRemove(id).then((todo) => {
+    if(!todo){
+        return res.status(404).send();
+    }
+    res.send({todo});
+}).catch((e) => {
+    res.status(400).send();
+});
