@@ -73,12 +73,8 @@ app.delete('/todos/:id', (req, res) => {
 });
 
 app.patch('/todos/:id', (req, res) => {
-    console.log("Req: ");
-    console.log(req.body.todo);
     var id = req.params.id;
     var body = _.pick(req.body.todo, ['text', 'completed']);
-    console.log("body: "); 
-    console.log(body);
     if(!ObjectID.isValid(id)){
         return res.status(404).send();
     }
