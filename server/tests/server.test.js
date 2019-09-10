@@ -108,64 +108,64 @@ describe('GET/todos/:id', () => {
 });
 
 describe('DELETE/todos/:id', () => {
-    //Should deletea todo
-    // it('should remove a todo', (done) => {
-    //     // console.log("Todos: ", todos[1]._id);
-    //     var hexId = todos[1]._id.toHexString();
-    //     request(app)
-    //     .delete(`/todos/${ hexId }`)
-    //     .expect(200)
-    //     .expect((res) => {
-    //         expect(res.body.todo._id).toBe(hexId);
-    //     })
-    //     .end((err, res) => {
-    //         if(err){
-    //             return done(err);
-    //         }
-    //         Todo.findById(hexId).then((todo) => {
-    //             expect(todo).toBeFalsy();
-    //             done();
-    //         }).catch((e) => done(e));
-    //     });
-    // });
+    //Should delete a todo
+    it('should remove a todo', (done) => {
+        // console.log("Todos: ", todos[1]._id);
+        var hexId = todos[1]._id.toHexString();
+        request(app)
+        .delete(`/todos/${ hexId }`)
+        .expect(200)
+        .expect((res) => {
+            expect(res.body._id).toBe(hexId);
+        })
+        .end((err, res) => {
+            if(err){
+                return done(err);
+            }
+            Todo.findById(hexId).then((todo) => {
+                expect(todo).toBeFalsy();
+                done();
+            }).catch((e) => done(e));
+        });
+    });
     //Should return 404 if not found
-    // it('Should return 404 if todo not found', (done) => {
-    //     var hexId = todos[1]._id.toHexString();
-    //     request(app)
-    //     .delete(`/todos/${ hexId }`)
-    //     .expect(200)
-    //     .expect((res) => {
-    //         expect(res.body.todo._id).toBe(hexId);
-    //     })
-    //     .end((err, res) => {
-    //         if(err){
-    //             return done(err);
-    //         }
-    //         Todo.findById(hexId).then((todo) => {
-    //             expect(todo).toBeFalsy();
-    //             done();
-    //         }).catch((e) => done(e));
-    //     });
-    // });
+    it('Should return 404 if todo not found', (done) => {
+        var hexId = todos[1]._id.toHexString();
+        request(app)
+        .delete(`/todos/${ hexId }`)
+        .expect(200)
+        .expect((res) => {
+            expect(res.body._id).toBe(hexId);
+        })
+        .end((err, res) => {
+            if(err){
+                return done(err);
+            }
+            Todo.findById(hexId).then((todo) => {
+                expect(todo).toBeFalsy();
+                done();
+            }).catch((e) => done(e));
+        });
+    });
 
-    // it('should return 404 if object id is invalid', (done) => {
-    //     var hexId = todos[1]._id.toHexString();
-    //     request(app)
-    //     .delete(`/todos/${ hexId }`)
-    //     .expect(200)
-    //     .expect((res) => {
-    //         expect(res.body.todo._id).toBe(hexId);
-    //     })
-    //     .end((err, res) => {
-    //         if(err){
-    //             return done(err);
-    //         }
-    //         Todo.findById(hexId).then((todo) => {
-    //             expect(todo).toBeFalsy();
-    //             done();
-    //         }).catch((e) => done(e));
-    //     });
-    // });
+    it('should return 404 if object id is invalid', (done) => {
+        var hexId = todos[1]._id.toHexString();
+        request(app)
+        .delete(`/todos/${ hexId }`)
+        .expect(200)
+        .expect((res) => {
+            expect(res.body._id).toBe(hexId);
+        })
+        .end((err, res) => {
+            if(err){
+                return done(err);
+            }
+            Todo.findById(hexId).then((todo) => {
+                expect(todo).toBeFalsy();
+                done();
+            }).catch((e) => done(e));
+        });
+    });
 });
 
 
